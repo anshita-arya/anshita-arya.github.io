@@ -4,19 +4,5 @@
 		"Authors": "E. Sekar, J. Anuradha, A. Arya, B. Balusamy, Victor I. C. Chang",
 		"Venue": "Springer Journal",
 		"Year": "2017"
-	}] ,
-	"presentations": [
-	{
-		"Title": "Build a complete serverless app while you wait for your coffee to brew", 
-		"Authors": "Anshita Arya, Sofia Ahmed",
-		"Venue": "Microsoft Inspire + Ready, Las Vegas, NV",
-		"Year": "2019"
-	},
-	{
-		"Title": "How we reviewed the codebase of Multi-million-dollar Azure and IoT Enterprise Application", 
-		"Authors": "Anshita Arya, Saranya Ravichander",
-		"Venue": "Microsoft Ready, Seattle, WA",
-		"Year": "2019"
-	}]
-	
+	}] 
 }
