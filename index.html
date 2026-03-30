@@ -1,56 +1,631 @@
-<!DOCTYPE HTML>  
-<html>  
-    <header>
-        <link rel="stylesheet" href="style1.css">
-        <link rel="stylesheet" href="table_style.css">
-        <title>Anshita Arya</title>
-    </header>
-    <body>  
-        <!---Navigation--->
-        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand" href="#page-top">Portfolio</a>
-                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="./list.html">Projects</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- Masthead-->
-        <header class="masthead bg-primary text-white text-center">
-            <div class="container d-flex align-items-center flex-column">
-                
-                <!-- Masthead Heading-->
-                <h1 class="masthead-heading text-uppercase mb-0">Anshita Arya</h1>
-                <!-- Icon Divider-->
-                <div class="divider-custom divider-light">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                    <div class="divider-custom-line"></div>
-                </div>
-                <!-- Masthead Subheading-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anshita Arya · Product Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-                <p class="masthead-subheading font-weight-light mb-0">
-                    University of California, Berkeley<br/>
-                    Graduate Student at School of Information
-                </p>
-            </div>
-        </header>
-        <center>
-            <br /><br />
-            <div class="col-md-6 col-lg-6 mb-5">
-                <!-- put your bio paragraph here; remember to use the correct html tags -->
-                <p>A graduate student at University of California, Berkeley. 
-                    I am a technology enthusiast with expertise in Cloud-based Enterprise Applications and a passion for Serverless Computing and Dev Tools. 
-                    I have a strong professional track record of designing and leading multiple pieces of training in Security and Cloud for a global audience.
-                </p>
-            </div>
-        </center>
-    </body>
+    :root {
+      --bg: #fafaf9;
+      --surface: #ffffff;
+      --border: #e8e6e3;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --tag-bg: #f3f4f6;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+    }
 
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(250,250,249,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 58px;
+    }
+    .nav-logo {
+      font-weight: 700; font-size: 15px; letter-spacing: -.3px;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted); font-size: 13.5px;
+      font-weight: 500; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── LAYOUT ── */
+    main { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+    section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700;
+      letter-spacing: -.5px; margin-bottom: 28px;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      padding-top: 130px; padding-bottom: 80px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .hero-eyebrow {
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      letter-spacing: .3px;
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 700; line-height: 1.15; letter-spacing: -.8px;
+    }
+    .hero-name span { color: var(--accent); }
+    .hero-tagline {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 580px; line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: 10px 22px; border-radius: 6px;
+      font-size: 13.5px; font-weight: 600; text-decoration: none;
+      transition: all .2s; cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .hero-stats { display: flex; gap: 36px; margin-top: 10px; }
+    .stat-num { font-size: 1.7rem; font-weight: 700; color: var(--text); }
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      align-items: start;
+    }
+    .about-text { font-size: 15px; color: var(--muted); line-height: 1.8; }
+    .about-text p + p { margin-top: 14px; }
+    .skills-grid { display: flex; flex-direction: column; gap: 16px; }
+    .skill-name {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; font-weight: 600; margin-bottom: 6px;
+    }
+    .skill-name span:last-child { color: var(--muted); font-weight: 400; }
+    .skill-bar {
+      height: 5px; background: var(--border); border-radius: 99px; overflow: hidden;
+    }
+    .skill-fill {
+      height: 100%; background: var(--accent); border-radius: 99px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .tag {
+      background: var(--tag-bg); color: var(--muted);
+      border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 500;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s;
+    }
+    .project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.09); }
+    .project-emoji { font-size: 26px; margin-bottom: 12px; }
+    .project-title { font-weight: 700; font-size: 15.5px; margin-bottom: 8px; }
+    .project-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+    .project-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 18px; flex-wrap: wrap; gap: 8px;
+    }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .project-tag {
+      background: var(--accent-light); color: var(--accent);
+      border-radius: 20px; padding: 3px 10px; font-size: 11.5px; font-weight: 600;
+    }
+    .project-badge {
+      background: #fef3c7; color: #92400e;
+      border-radius: 20px; padding: 3px 10px; font-size: 11.5px; font-weight: 600;
+    }
+    .project-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .project-gh-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12.5px; font-weight: 600; color: var(--muted);
+      text-decoration: none; transition: color .2s;
+    }
+    .project-gh-link:hover { color: var(--text); }
+    .project-gh-link svg { width: 14px; height: 14px; }
+
+    /* ── EXPERIENCE ── */
+    .timeline { display: flex; flex-direction: column; }
+    .timeline-item {
+      display: grid; grid-template-columns: 130px 1fr;
+      gap: 0 28px; padding-bottom: 36px; position: relative;
+    }
+    .timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute; left: 130px; top: 8px; bottom: 0;
+      width: 1px; background: var(--border); margin-left: 13px;
+    }
+    .timeline-date {
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      padding-top: 3px; text-align: right; line-height: 1.5;
+    }
+    .timeline-dot {
+      position: absolute; left: 130px; top: 5px;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent); margin-left: 10px;
+      outline: 3px solid var(--bg);
+    }
+    .timeline-content { padding-left: 28px; }
+    .timeline-role { font-weight: 700; font-size: 15px; }
+    .timeline-company { font-size: 13.5px; color: var(--accent); font-weight: 600; margin-top: 1px; }
+    .timeline-bullets { margin-top: 8px; padding-left: 18px; }
+    .timeline-bullets li {
+      font-size: 13px; color: var(--muted); margin-bottom: 5px; line-height: 1.65;
+    }
+
+    /* ── EDUCATION ── */
+    .edu-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
+    .edu-strip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .edu-degree { font-weight: 700; font-size: 14.5px; }
+    .edu-school { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .edu-right { text-align: right; flex-shrink: 0; }
+    .edu-year { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .edu-gpa {
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      background: var(--accent-light); border-radius: 20px;
+      padding: 2px 9px; margin-top: 4px; display: inline-block;
+    }
+
+    /* ── AWARDS ── */
+    .awards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .award-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 20px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .award-icon { font-size: 22px; flex-shrink: 0; }
+    .award-title { font-weight: 600; font-size: 13.5px; }
+    .award-desc { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.55; }
+
+    /* ── CONTACT ── */
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+    }
+    .contact-text { font-size: 15px; color: var(--muted); line-height: 1.75; }
+    .contact-links { display: flex; flex-direction: column; gap: 14px; }
+    .contact-link {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--text);
+      padding: 14px 18px; border: 1.5px solid var(--border);
+      border-radius: var(--radius); font-size: 14px; font-weight: 500;
+      transition: all .2s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .contact-link-icon { font-size: 18px; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 32px 24px;
+      font-size: 12.5px; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .about-grid, .projects-grid, .contact-inner, .awards-grid { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; }
+      .timeline-item::before { display: none; }
+      .timeline-dot { display: none; }
+      .timeline-date { text-align: left; }
+      .timeline-content { padding-left: 0; }
+      .hero-stats { gap: 24px; flex-wrap: wrap; }
+      nav .nav-links { display: none; }
+      .edu-strip { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">Anshita Arya</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#awards">Awards</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-eyebrow">👋 Hello, I'm</div>
+    <h1 class="hero-name">Anshita Arya<br><span>Product Manager</span></h1>
+    <p class="hero-tagline">
+      Technical PM at Hewlett Packard Enterprise — building AI-powered products, driving hybrid cloud strategy, and turning complex engineering systems into meaningful user experiences at scale.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">View My Work</a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Years in Tech</div>
+      </div>
+      <div>
+        <div class="stat-num">$70M+</div>
+        <div class="stat-label">Revenue Driven</div>
+      </div>
+      <div>
+        <div class="stat-num">15K+</div>
+        <div class="stat-label">People Educated</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT & SKILLS -->
+  <section id="about">
+    <div class="section-label">About Me</div>
+    <h2>Engineer turned Product Manager</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm a Product Manager at Hewlett Packard Enterprise with a background in software engineering at Microsoft. My technical roots give me a rare ability to speak both the language of users and the language of engineers — which means fewer translation errors and faster, better products.
+        </p>
+        <p>
+          At HPE, I lead hybrid cloud products driving $70M+ in revenue, integrating sustainability as a core product priority and building AI agents to boost team productivity. Before that, I spent 6 years at Microsoft shipping products used by thousands of engineers and partners globally.
+        </p>
+        <p>
+          I hold a Master's in Information Management & Systems from UC Berkeley and love the intersection of AI, data, and human behavior.
+        </p>
+        <div class="tags">
+          <span class="tag">Product Strategy</span>
+          <span class="tag">Lean &amp; Agile</span>
+          <span class="tag">AI / Generative AI</span>
+          <span class="tag">Cloud Computing</span>
+          <span class="tag">Customer Discovery</span>
+          <span class="tag">Roadmapping</span>
+          <span class="tag">Python</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Figma</span>
+          <span class="tag">DevOps</span>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div>
+          <div class="skill-name"><span>Product Strategy &amp; Roadmap</span><span>95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        </div>
+        <div>
+          <div class="skill-name"><span>AI / Data Products</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div>
+          <div class="skill-name"><span>Stakeholder Alignment</span><span>92%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+        </div>
+        <div>
+          <div class="skill-name"><span>Customer Discovery &amp; Research</span><span>88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+        </div>
+        <div>
+          <div class="skill-name"><span>Technical (Python, C#, Cloud)</span><span>85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div>
+          <div class="skill-name"><span>Analytics &amp; Metrics</span><span>87%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">Work</div>
+    <h2>Selected projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-emoji">🤖</div>
+        <div class="project-title">Conversational Data &amp; AI Bot</div>
+        <div class="project-desc">
+          Conceptualized, designed, and built a product that lets business users ask data questions in natural language and receive actionable insights with visualizations — powered by LLMs and BI tools.
+        </div>
+        <div class="project-meta">
+          <div class="project-tags">
+            <span class="project-tag">NLP</span>
+            <span class="project-tag">Generative AI</span>
+            <span class="project-tag">BI</span>
+          </div>
+          <span class="project-badge">UC Berkeley · 2023</span>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/DashQueries/dashqueries.github.io" target="_blank" class="project-gh-link">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-emoji">☁️</div>
+        <div class="project-title">Hybrid Cloud Sustainability Products</div>
+        <div class="project-desc">
+          Led end-to-end product lifecycle for two business-critical hybrid cloud products at HPE — driving $70M+ in revenue and 50% year-over-year growth by embedding sustainability as a core product priority.
+        </div>
+        <div class="project-meta">
+          <div class="project-tags">
+            <span class="project-tag">Cloud</span>
+            <span class="project-tag">Sustainability</span>
+          </div>
+          <span class="project-badge">HPE · 2022–present</span>
+        </div>
+        <div class="project-footer">
+          <span style="font-size:12px;color:var(--muted);">Proprietary — not open source</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-emoji">📖</div>
+        <div class="project-title">Autobiography Mobile App</div>
+        <div class="project-desc">
+          Designed and built a prototype that uses cognitive services and phone data to help users write their autobiography — recognized as a Top 10 project at the Microsoft Global Hackathon 2019.
+        </div>
+        <div class="project-meta">
+          <div class="project-tags">
+            <span class="project-tag">Cognitive AI</span>
+            <span class="project-tag">Mobile</span>
+          </div>
+          <span class="project-badge">🏆 Top 10 · MSFT Hackathon</span>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/anshita-arya" target="_blank" class="project-gh-link">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-emoji">🚦</div>
+        <div class="project-title">Smart Traffic Management System</div>
+        <div class="project-desc">
+          Conceptualized and designed a recommendation product to route users via the most convenient paths using IoT and data streaming — published in Cluster Computing, Springer.
+        </div>
+        <div class="project-meta">
+          <div class="project-tags">
+            <span class="project-tag">IoT</span>
+            <span class="project-tag">Data Science</span>
+          </div>
+          <span class="project-badge">📄 Springer · 2016</span>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/anshita-arya" target="_blank" class="project-gh-link">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">Experience</div>
+    <h2>Where I've worked</h2>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-date">2022 — Present</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-role">Product Manager</div>
+          <div class="timeline-company">Hewlett Packard Enterprise · Houston, TX</div>
+          <ul class="timeline-bullets">
+            <li>Building AI agents to increase team productivity and bring efficiency to hybrid cloud systems.</li>
+            <li>Led end-to-end product lifecycle for two business-critical hybrid cloud products driving <strong>$70M+ revenue &amp; 50% y/y growth</strong>.</li>
+            <li>Spearheaded strategy to integrate sustainability as a core product priority through competitive analysis, customer research, and market trends.</li>
+            <li>Automated reverse logistics in the circular economy, reducing manual intervention by <strong>&gt;90%</strong>.</li>
+            <li>Defined next-gen product specifications from usage data, increasing Serviceable Obtainable Market by <strong>4X</strong>.</li>
+            <li>Increased demand-steering process efficiency, saving PMs 20% of their time while boosting stakeholder visibility.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">2019 — 2021</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-role">Senior Software Engineer</div>
+          <div class="timeline-company">Microsoft</div>
+          <ul class="timeline-bullets">
+            <li>Drove Azure growth by influencing SwissRe to migrate 75 products, leading to <strong>700 additional migrations</strong> and significant revenue increases.</li>
+            <li>Led a cross-functional team of 10 to design and develop a <strong>$6.5M security product</strong> integrated with Maersk's global supply chain management system.</li>
+            <li>Delivered technical presentations on Serverless Computing and Cloud &amp; IoT at global Microsoft conferences, educating <strong>15,000+ employees and partners</strong>.
+              <a href="https://github.com/anshita-arya/MicrosoftReady19_ServerlessWorkshop" target="_blank" class="project-gh-link">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                  View on GitHub  
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">2015 — 2019</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-role">Software Engineer</div>
+          <div class="timeline-company">Microsoft</div>
+          <ul class="timeline-bullets">
+            <li>Built an email servicing product using Power Platform, reused by <strong>40 teams globally</strong>.</li>
+            <li>Created an internal IP product for code maintenance adopted by <strong>100 teams globally</strong>.</li>
+            <li>Designed an automation testing framework for a connected vehicles platform, saving <strong>80% of annual manual testing effort</strong>.</li>
+            <li>Developed a code analyzer &amp; auto-fixer used by <strong>1,500+ engineers</strong>, reducing defect density from 1.5 to 0.7.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Education -->
+    <div class="edu-cards">
+      <div class="edu-strip">
+        <div>
+          <div class="edu-degree">Master of Information Management &amp; Systems</div>
+          <div class="edu-school">University of California, Berkeley</div>
+        </div>
+        <div class="edu-right">
+          <div class="edu-year">2021 – 2023</div>
+          <div class="edu-gpa">GPA 3.76</div>
+        </div>
+      </div>
+      <div class="edu-strip">
+        <div>
+          <div class="edu-degree">B.Tech, Computer Science &amp; Engineering</div>
+          <div class="edu-school">Vellore Institute of Technology, India</div>
+        </div>
+        <div class="edu-right">
+          <div class="edu-year">2012 – 2016</div>
+          <div class="edu-gpa">CGPA 9.18/10</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AWARDS & RECOGNITION -->
+  <section id="awards">
+    <div class="section-label">Recognition</div>
+    <h2>Awards &amp; activities</h2>
+    <div class="awards-grid">
+
+      <div class="award-card">
+        <div class="award-icon">🎤</div>
+        <div>
+          <div class="award-title">GHC 2023 &amp; 2024 Speaker</div>
+          <div class="award-desc">Designed and delivered a workshop at Grace Hopper Celebration empowering attendees to build apps using low-code solutions.</div>
+        </div>
+      </div>
+
+      <div class="award-card">
+        <div class="award-icon">🏆</div>
+        <div>
+          <div class="award-title">Grace Hopper Celebration Scholar</div>
+          <div class="award-desc">Awarded the GHC Scholarship in both 2021 and 2022 for outstanding contributions to tech and leadership.</div>
+        </div>
+      </div>
+
+      <div class="award-card">
+        <div class="award-icon">💙</div>
+        <div>
+          <div class="award-title">Non-Profit Leader</div>
+          <div class="award-desc">Raised INR 130K and helped ~100 children from underrepresented communities gain access to STEM education.</div>
+        </div>
+      </div>
+
+      <div class="award-card">
+        <div class="award-icon">💪</div>
+        <div>
+          <div class="award-title">#IamRemarkable Facilitator</div>
+          <div class="award-desc">97% of 187 participants felt more confident in self-advocacy following the facilitated workshop.</div>
+        </div>
+      </div>
+
+      <div class="award-card">
+        <div class="award-icon">⭐</div>
+        <div>
+          <div class="award-title">Microsoft Best Consultant</div>
+          <div class="award-desc">Recognized for exceptional performance and technical leadership, 2020. Also received Microsoft Worldwide "Better Together" award (2019) and Microsoft Spot Award (2017).</div>
+        </div>
+      </div>
+
+      <div class="award-card">
+        <div class="award-icon">📄</div>
+        <div>
+          <div class="award-title">Published Researcher · Springer</div>
+          <div class="award-desc">Co-authored paper on smart traffic management using hybrid clustering, published in Cluster Computing, Springer (2016).</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Contact</div>
+    <h2>Let's connect</h2>
+    <div class="contact-inner">
+      <div class="contact-text">
+        <p>I'm always open to interesting conversations — whether it's a new opportunity, a collaboration, or just talking product and AI. Feel free to reach out.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:anshita.14a@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          anshita.14a@gmail.com
+        </a>
+        <a href="https://linkedin.com/in/anshitaarya" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💼</span>
+          linkedin.com/in/anshitaarya
+        </a>
+        <a href="https://github.com/anshita-arya" target="_blank" class="contact-link">
+          <span class="contact-link-icon">🐙</span>
+          github.com/anshita-arya
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Designed &amp; built by Anshita Arya · 2026</p>
+</footer>
+
+</body>
 </html>
