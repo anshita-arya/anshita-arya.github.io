@@ -113,17 +113,16 @@
     }
     .about-text { font-size: 15px; color: var(--muted); line-height: 1.8; }
     .about-text p + p { margin-top: 14px; }
-    .skills-grid { display: flex; flex-direction: column; gap: 16px; }
-    .skill-name {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 13px; font-weight: 600; margin-bottom: 6px;
+    .skills-grid { display: flex; flex-direction: column; gap: 14px; }
+    .skill-group-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 7px;
     }
-    .skill-name span:last-child { color: var(--muted); font-weight: 400; }
-    .skill-bar {
-      height: 5px; background: var(--border); border-radius: 99px; overflow: hidden;
-    }
-    .skill-fill {
-      height: 100%; background: var(--accent); border-radius: 99px;
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .skill-pill {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 13px;
+      font-size: 12.5px; font-weight: 500; color: var(--text);
     }
     .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
     .tag {
@@ -132,28 +131,31 @@
     }
 
     /* ── PROJECTS ── */
-    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .projects-grid { display: flex; flex-direction: column; gap: 14px; }
     .project-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 24px;
+      border-radius: var(--radius); padding: 20px 24px;
       box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s;
+      display: flex; gap: 24px; align-items: flex-start;
     }
     .project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.09); }
-    .project-emoji { font-size: 26px; margin-bottom: 12px; }
-    .project-title { font-weight: 700; font-size: 15.5px; margin-bottom: 8px; }
+    .project-main { flex: 1; }
+    .project-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .project-emoji { font-size: 22px; flex-shrink: 0; }
+    .project-title { font-weight: 700; font-size: 15px; }
     .project-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
-    .project-meta {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 18px; flex-wrap: wrap; gap: 8px;
+    .project-side {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 8px; flex-shrink: 0; min-width: 160px;
     }
-    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
     .project-tag {
       background: var(--accent-light); color: var(--accent);
       border-radius: 20px; padding: 3px 10px; font-size: 11.5px; font-weight: 600;
     }
     .project-badge {
       background: #fef3c7; color: #92400e;
-      border-radius: 20px; padding: 3px 10px; font-size: 11.5px; font-weight: 600;
+      border-radius: 20px; padding: 3px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap;
     }
     .project-footer {
       display: flex; justify-content: space-between; align-items: center;
@@ -203,8 +205,19 @@
       border-radius: var(--radius); padding: 18px 24px;
       display: flex; justify-content: space-between; align-items: center;
     }
+    .edu-logo {
+      width: 40px; height: 40px; object-fit: contain;
+      border-radius: 8px; flex-shrink: 0; margin-right: 16px;
+      background: #fff; border: 1px solid var(--border); padding: 4px;
+    }
+    .edu-strip-left { display: flex; align-items: center; }
     .edu-degree { font-weight: 700; font-size: 14.5px; }
     .edu-school { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .timeline-logo {
+      width: 18px; height: 18px; object-fit: contain;
+      border-radius: 4px; vertical-align: middle; margin-right: 6px;
+      background: #fff; border: 1px solid var(--border); padding: 1px;
+    }
     .edu-right { text-align: right; flex-shrink: 0; }
     .edu-year { font-size: 13px; color: var(--muted); font-weight: 500; }
     .edu-gpa {
@@ -222,7 +235,30 @@
     }
     .award-icon { font-size: 22px; flex-shrink: 0; }
     .award-title { font-weight: 600; font-size: 13.5px; }
+    .award-title a { color: inherit; text-decoration: none; }
+    .award-title a:hover { text-decoration: underline; }
     .award-desc { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.55; }
+
+    /* ── TALKS ── */
+    .talks-list { display: flex; flex-direction: column; gap: 14px; }
+    .talk-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
+    }
+    .talk-main { flex: 1; }
+    .talk-title { font-weight: 700; font-size: 14.5px; }
+    .talk-title a { color: inherit; text-decoration: none; }
+    .talk-title a:hover { text-decoration: underline; }
+    .talk-venue { font-size: 13px; color: var(--accent); font-weight: 600; margin-top: 3px; }
+    .talk-desc { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.55; }
+    .talk-meta { text-align: right; flex-shrink: 0; }
+    .talk-year { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+    .talk-tag {
+      display: inline-block; margin-top: 6px;
+      background: var(--accent-light); color: var(--accent);
+      border-radius: 20px; padding: 2px 10px; font-size: 11.5px; font-weight: 600;
+    }
 
     /* ── CONTACT ── */
     .contact-inner {
@@ -249,7 +285,10 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
-      .about-grid, .projects-grid, .contact-inner, .awards-grid { grid-template-columns: 1fr; }
+      .about-grid, .contact-inner, .awards-grid { grid-template-columns: 1fr; }
+      .project-card { flex-direction: column; }
+      .project-side { align-items: flex-start; min-width: unset; }
+      .project-tags { justify-content: flex-start; }
       .timeline-item { grid-template-columns: 1fr; }
       .timeline-item::before { display: none; }
       .timeline-dot { display: none; }
@@ -269,8 +308,9 @@
     <a href="#hero" class="nav-logo">Anshita Arya</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
       <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#talks">Talks</a></li>
       <li><a href="#awards">Awards</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -318,140 +358,52 @@
         </p>
         <p>
           At HPE, I lead hybrid cloud products driving $70M+ in revenue, integrating sustainability as a core product priority and building 0->1 AI products to boost team productivity and bring more value to Enterprise customers. 
-          Before that, I spent 5 years at Microsoft and the Cloud+AI team, building products used by thousands of engineers and partners globally.
+        </p>
+        <p>
+          Before that, I spent 5 years at Microsoft on the Cloud+AI team, building products used by thousands of engineers and partners globally.
         </p>
         <p>
           I hold a Master's in Information Management & Systems from UC Berkeley and love the intersection of AI, data, and human behavior.
         </p>
-        <div class="tags">
-          <span class="tag">Product Strategy</span>
-          <span class="tag">Lean &amp; Agile</span>
-          <span class="tag">AI / Generative AI</span>
-          <span class="tag">Cloud Computing</span>
-          <span class="tag">Customer Discovery</span>
-          <span class="tag">Roadmapping</span>
-          <span class="tag">Python</span>
-          <span class="tag">SQL</span>
-          <span class="tag">DevOps</span>
-        </div>
+       
       </div>
       <div class="skills-grid">
         <div>
-          <div class="skill-name"><span>Product Strategy &amp; Roadmap</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
-        </div>
-        <div>
-          <div class="skill-name"><span>AI / Data Products</span><span>90%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
-        </div>
-        <div>
-          <div class="skill-name"><span>Stakeholder Alignment</span><span>92%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
-        </div>
-        <div>
-          <div class="skill-name"><span>Customer Discovery &amp; Research</span><span>88%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
-        </div>
-        <div>
-          <div class="skill-name"><span>Technical (Python, C#, Cloud)</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
-        </div>
-        <div>
-          <div class="skill-name"><span>Analytics &amp; Metrics</span><span>87%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="section-label">Work</div>
-    <h2>Selected projects</h2>
-    <div class="projects-grid">
-
-      <div class="project-card">
-        <div class="project-emoji">🤖</div>
-        <div class="project-title">Conversational Data &amp; AI Bot</div>
-        <div class="project-desc">
-          Conceptualized, designed, and built a product that lets business users ask data questions in natural language and receive actionable insights with visualizations — powered by LLMs and BI tools.
-        </div>
-        <div class="project-meta">
-          <div class="project-tags">
-            <span class="project-tag">NLP</span>
-            <span class="project-tag">Generative AI</span>
-            <span class="project-tag">BI</span>
+          <div class="skill-group-label">Product</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Product Strategy</span>
+            <span class="skill-pill">Roadmap Planning</span>
+            <span class="skill-pill">Customer Discovery</span>
+            <span class="skill-pill">Stakeholder Alignment</span>
+            <span class="skill-pill">Go-to-Market</span>
+            <span class="skill-pill">Product Metrics</span>
+            <span class="skill-pill">A/B Testing</span>
           </div>
-          <span class="project-badge">UC Berkeley · 2023</span>
         </div>
-        <div class="project-footer">
-          <a href="https://github.com/DashQueries/dashqueries.github.io" target="_blank" class="project-gh-link">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-emoji">☁️</div>
-        <div class="project-title">Hybrid Cloud Sustainability Products</div>
-        <div class="project-desc">
-          Led end-to-end product lifecycle for two business-critical hybrid cloud products at HPE — driving $70M+ in revenue and 50% year-over-year growth by embedding sustainability as a core product priority.
-        </div>
-        <div class="project-meta">
-          <div class="project-tags">
-            <span class="project-tag">Cloud</span>
-            <span class="project-tag">Sustainability</span>
+        <div>
+          <div class="skill-group-label">AI &amp; Data</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Agentic AI</span>
+            <span class="skill-pill">Generative AI</span>
+            <span class="skill-pill">Cognitive AI</span>
+            <span class="skill-pill">LLM</span>
+            <span class="skill-pill">Data Analytics</span>
+            <span class="skill-pill">Data Visualisation</span>
           </div>
-          <span class="project-badge">HPE · 2023–present</span>
         </div>
-        <div class="project-footer">
-          <span style="font-size:12px;">https://www.hpe.com/us/en/hpe-alletra.html</span>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-emoji">📖</div>
-        <div class="project-title">Autobiography Mobile App</div>
-        <div class="project-desc">
-          Designed and built a prototype that uses cognitive services and phone data to help users write their autobiography — recognized as a Top 10 project at the Microsoft Global Hackathon 2019.
-        </div>
-        <div class="project-meta">
-          <div class="project-tags">
-            <span class="project-tag">Cognitive AI</span>
-            <span class="project-tag">Mobile</span>
+        <div>
+          <div class="skill-group-label">Technical</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">C#</span>
+            <span class="skill-pill">REST API</span>
+            <span class="skill-pill">SQL</span>
+            <span class="skill-pill">Cloud Platform - Azure</span>
+            <span class="skill-pill">Microsoft Power Platform</span>
+            <span class="skill-pill">DevOps</span>
           </div>
-          <span class="project-badge">🏆 Top 10 · MSFT Hackathon</span>
-        </div>
-        <div class="project-footer">
-          <a href="https://github.com/anshita-arya" target="_blank" class="project-gh-link">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            View on GitHub
-          </a>
         </div>
       </div>
-
-      <div class="project-card">
-        <div class="project-emoji">🚦</div>
-        <div class="project-title">Smart Traffic Management System</div>
-        <div class="project-desc">
-          Conceptualized and designed a recommendation product to route users via the most convenient paths using IoT and data streaming — published in Cluster Computing, Springer.
-        </div>
-        <div class="project-meta">
-          <div class="project-tags">
-            <span class="project-tag">IoT</span>
-            <span class="project-tag">Data Science</span>
-          </div>
-          <span class="project-badge">📄 Springer · 2016</span>
-        </div>
-        <div class="project-footer">
-          <a href="https://www.springerprofessional.com/en/a-framework-for-smart-traffic-management-using-hybrid-clustering/12274360" target="_blank" class="project-gh-link">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            View on Springer
-          </a>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -467,7 +419,7 @@
         <div class="timeline-dot"></div>
         <div class="timeline-content">
           <div class="timeline-role">Product Manager</div>
-          <div class="timeline-company">Hewlett Packard Enterprise · San Jose, CA</div>
+          <div class="timeline-company"><img src="https://www.google.com/s2/favicons?domain=hpe.com&sz=64" alt="HPE" class="timeline-logo">Hewlett Packard Enterprise · San Jose, CA</div>
           <ul class="timeline-bullets">
             <li>Building AI agents to increase team productivity and bring efficiency to hybrid cloud systems.</li>
             <li>Led end-to-end product lifecycle for two business-critical hybrid cloud products driving <strong>$70M+ revenue &amp; 50% y/y growth</strong>.</li>
@@ -484,14 +436,14 @@
         <div class="timeline-dot"></div>
         <div class="timeline-content">
           <div class="timeline-role">Senior Software Engineer</div>
-          <div class="timeline-company">Microsoft</div>
+          <div class="timeline-company"><img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" alt="Microsoft" class="timeline-logo">Microsoft</div>
           <ul class="timeline-bullets">
             <li>Drove Azure growth by influencing SwissRe to migrate 75 products, leading to <strong>700 additional migrations</strong> and significant revenue increases.</li>
             <li>Led a cross-functional team of 10 to design and develop a <strong>$6.5M security product</strong> integrated with Maersk's global supply chain management system.</li>
             <li>Delivered technical presentations on Serverless Computing and Cloud &amp; IoT at global Microsoft conferences, educating <strong>15,000+ employees and partners</strong>.
               <a href="https://github.com/anshita-arya/MicrosoftReady19_ServerlessWorkshop" target="_blank" class="project-gh-link">
                   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                  View on GitHub  
+                  View on GitHub
               </a>
             </li>
           </ul>
@@ -503,7 +455,7 @@
         <div class="timeline-dot"></div>
         <div class="timeline-content">
           <div class="timeline-role">Software Engineer</div>
-          <div class="timeline-company">Microsoft</div>
+          <div class="timeline-company"><img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=64" alt="Microsoft" class="timeline-logo">Microsoft</div>
           <ul class="timeline-bullets">
             <li>Built an email servicing product using Power Platform, reused by <strong>40 teams globally</strong>.</li>
             <li>Created an internal IP product for code maintenance adopted by <strong>100 teams globally</strong>.</li>
@@ -518,9 +470,12 @@
     <!-- Education -->
     <div class="edu-cards">
       <div class="edu-strip">
-        <div>
-          <div class="edu-degree">Master of Information Management &amp; Systems</div>
-          <div class="edu-school">University of California, Berkeley</div>
+        <div class="edu-strip-left">
+          <img src="https://www.google.com/s2/favicons?domain=berkeley.edu&sz=64" alt="UC Berkeley" class="edu-logo">
+          <div>
+            <div class="edu-degree">Master of Information Management &amp; Systems</div>
+            <div class="edu-school">University of California, Berkeley</div>
+          </div>
         </div>
         <div class="edu-right">
           <div class="edu-year">2021 – 2023</div>
@@ -528,15 +483,188 @@
         </div>
       </div>
       <div class="edu-strip">
-        <div>
-          <div class="edu-degree">B.Tech, Computer Science &amp; Engineering</div>
-          <div class="edu-school">Vellore Institute of Technology, India</div>
+        <div class="edu-strip-left">
+          <img src="https://www.google.com/s2/favicons?domain=vit.ac.in&sz=64" alt="VIT" class="edu-logo">
+          <div>
+            <div class="edu-degree">B.Tech, Computer Science &amp; Engineering</div>
+            <div class="edu-school">Vellore Institute of Technology, India</div>
+          </div>
         </div>
         <div class="edu-right">
           <div class="edu-year">2012 – 2016</div>
           <div class="edu-gpa">CGPA 9.18/10</div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">Work</div>
+    <h2>Projects</h2>
+    <div class="projects-grid">
+
+        <div class="project-card">
+        <div class="project-main">
+          <div class="project-header">
+            <span class="project-emoji">🤖</span>
+            <div class="project-title">PM Productivity Tooling</div>
+          </div>
+          <div class="project-desc">Conceptualized, designed, and built multiple tools to boost PM productivities</div>
+          <a href="https://lovable.dev/@anshita_a" target="_blank" class="project-gh-link" style="margin-top:12px;display:inline-flex;">
+            <svg width="14" height="14" viewBox="0 0 149 152" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lovable-grad" x1="50" y1="27" x2="95" y2="151" gradientUnits="userSpaceOnUse"><stop offset="0.025" stop-color="#FF8E63"/><stop offset="0.56" stop-color="#FF7EB0"/><stop offset="0.95" stop-color="#4B73FF"/></linearGradient></defs><path fill-rule="evenodd" clip-rule="evenodd" d="M44.6502 0C69.3099 0 89.3004 20.0433 89.3004 44.7679V61.7825H104.16C128.82 61.7825 148.81 81.8258 148.81 106.55C148.81 131.275 128.82 151.318 104.16 151.318H0V44.7679C0 20.0433 19.9906 0 44.6502 0Z" fill="url(#lovable-grad)"/></svg>
+            View on Lovable
+          </a>
+        </div>
+        <div class="project-side">
+          <span class="project-badge">UC Berkeley · 2023</span>
+          <div class="project-tags">
+            <span class="project-tag">NLP</span>
+            <span class="project-tag">Generative AI</span>
+            <span class="project-tag">BI</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-main">
+          <div class="project-header">
+            <span class="project-emoji">🤖</span>
+            <div class="project-title">Conversational Data &amp; AI Bot</div>
+          </div>
+          <div class="project-desc">Conceptualized, designed, and built a product that lets business users ask data questions in natural language and receive actionable insights with visualizations — powered by LLMs and BI tools.</div>
+          <a href="https://github.com/DashQueries/dashqueries.github.io" target="_blank" class="project-gh-link" style="margin-top:12px;display:inline-flex;">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+        <div class="project-side">
+          <span class="project-badge">UC Berkeley · 2023</span>
+          <div class="project-tags">
+            <span class="project-tag">NLP</span>
+            <span class="project-tag">Generative AI</span>
+            <span class="project-tag">BI</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-main">
+          <div class="project-header">
+            <span class="project-emoji">📖</span>
+            <div class="project-title">Autobiography Mobile App</div>
+          </div>
+          <div class="project-desc">Designed and built a prototype that uses cognitive services and phone data to help users write their autobiography — recognized as a Top 10 project at the Microsoft Global Hackathon 2019.</div>
+          <a href="https://github.com/anshita-arya" target="_blank" class="project-gh-link" style="margin-top:12px;display:inline-flex;">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+        <div class="project-side">
+          <span class="project-badge">🏆 Top 10 · MSFT Hackathon</span>
+          <div class="project-tags">
+            <span class="project-tag">Cognitive AI</span>
+            <span class="project-tag">Mobile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Publications</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-main">
+          <div class="project-header">
+            <span class="project-emoji">🚦</span>
+            <div class="project-title">Smart Traffic Management System</div>
+          </div>
+          <div class="project-desc">Conceptualized and designed a recommendation product to route users via the most convenient paths using IoT and data streaming — published in Cluster Computing, Springer.</div>
+          <a href="https://www.springerprofessional.com/en/a-framework-for-smart-traffic-management-using-hybrid-clustering/12274360" target="_blank" class="project-gh-link" style="margin-top:12px;display:inline-flex;">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            View on Springer
+          </a>
+        </div>
+        <div class="project-side">
+          <span class="project-badge">📄 Springer · 2016</span>
+          <div class="project-tags">
+            <span class="project-tag">IoT</span>
+            <span class="project-tag">Data Science</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TALKS & WORKSHOPS -->
+  <section id="talks">
+    <div class="section-label">Speaking</div>
+    <h2>Talks &amp; workshops</h2>
+    <div class="talks-list">
+
+      <div class="talk-card">
+        <div class="talk-main">
+          <div class="talk-title"><a href="#">Building Apps with Low-Code Solutions</a></div>
+          <div class="talk-venue">Grace Hopper Celebration (GHC)</div>
+          <div class="talk-desc">Designed and delivered a hands-on workshop empowering attendees to build production-ready apps using low-code and no-code platforms.
+            2023 · Build a Complete Application while you wait for your laundry
+            2024 · Build a Complete Application while you wait for your coffee to brew 
+          </div>
+        </div>
+        <div class="talk-meta">
+          <div class="talk-year">2023 &amp; 2024</div>
+          <span class="talk-tag">Workshop</span>
+        </div>
+      </div>
+
+      <div class="talk-card">
+        <div class="talk-main">
+          <div class="talk-title"><a href="#">Career</a></div>
+          <div class="talk-venue">Google Developers Group</div>
+          <div class="talk-desc">--</div>
+        </div>
+        <div class="talk-meta">
+          <div class="talk-year">2023</div>
+          <span class="talk-tag">Career Talk</span>
+        </div>
+        </div>
+
+      <div class="talk-card">
+        <div class="talk-main">
+          <div class="talk-title"><a href="#">Serverless Computing on Azure</a></div>
+          <div class="talk-venue">Microsoft Ready · Global Conference</div>
+          <div class="talk-desc">Delivered a technical workshop on leveraging Micorosft Power Platform to build serverless applications, to Microsoft employees and partners worldwide.</div>
+        </div>
+        <div class="talk-meta">
+          <div class="talk-year">Las Vegas · 2019</div>
+          <span class="talk-tag">Workshop</span>
+        </div>
+      </div>
+
+      <div class="talk-card">
+        <div class="talk-main">
+          <div class="talk-title"><a href="#">Reviewing Cloud &amp; IoT codebases</a></div>
+          <div class="talk-venue">Microsoft Ready · Global Conference</div>
+          <div class="talk-desc">Technical presentation on reviewing large scale codebases of IoT systems on the cloud, reaching 15,000+ employees and partners.</div>
+        </div>
+        <div class="talk-meta">
+          <div class="talk-year">Seattle · 2019</div>
+          <span class="talk-tag">Lab</span>
+        </div>
+      </div>
+
+      <div class="talk-card">
+        <div class="talk-main">
+          <div class="talk-title"><a href="#">#IamRemarkable: Self-Advocacy in the Workplace</a></div>
+          <div class="talk-venue">#IamRemarkable · Google Initiative</div>
+          <div class="talk-desc">Facilitated workshop on overcoming self-promotion barriers — 97% of 187 participants reported increased confidence in self-advocacy.</div>
+        </div>
+        <div class="talk-meta">
+          <div class="talk-year">2022 – 2023</div>
+          <span class="talk-tag">Workshop</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -547,17 +675,9 @@
     <div class="awards-grid">
 
       <div class="award-card">
-        <div class="award-icon">🎤</div>
-        <div>
-          <div class="award-title">GHC 2023 &amp; 2024 Speaker</div>
-          <div class="award-desc">Designed and delivered a workshop at Grace Hopper Celebration empowering attendees to build apps using low-code solutions.</div>
-        </div>
-      </div>
-
-      <div class="award-card">
         <div class="award-icon">🏆</div>
         <div>
-          <div class="award-title">Grace Hopper Celebration Scholar</div>
+          <div class="award-title"><a href="https://ghc.anitab.org/awards-programs/scholarships">Grace Hopper Celebration Scholar</a></div>
           <div class="award-desc">Awarded the GHC Scholarship in both 2021 and 2022 for outstanding contributions to tech and leadership.</div>
         </div>
       </div>
@@ -565,7 +685,7 @@
       <div class="award-card">
         <div class="award-icon">💙</div>
         <div>
-          <div class="award-title">Non-Profit Leader</div>
+          <div class="award-title"><a href="https://www.nuevofoundation.org/">Non-Profit Leader</a></div>
           <div class="award-desc">Raised INR 130K and helped ~100 children from underrepresented communities gain access to STEM education.</div>
         </div>
       </div>
@@ -573,7 +693,7 @@
       <div class="award-card">
         <div class="award-icon">💪</div>
         <div>
-          <div class="award-title">#IamRemarkable Facilitator</div>
+          <div class="award-title"><a href="https://www.rmrkblty.org/iamremarkable">#IamRemarkable Facilitator</a></div>
           <div class="award-desc">97% of 187 participants felt more confident in self-advocacy following the facilitated workshop.</div>
         </div>
       </div>
@@ -581,19 +701,10 @@
       <div class="award-card">
         <div class="award-icon">⭐</div>
         <div>
-          <div class="award-title">Microsoft Best Consultant</div>
+          <div class="award-title"><a href="#">Microsoft Best Consultant</a></div>
           <div class="award-desc">Recognized for exceptional performance and technical leadership, 2020. Also received Microsoft Worldwide "Better Together" award (2019) and Microsoft Spot Award (2017).</div>
         </div>
       </div>
-
-      <div class="award-card">
-        <div class="award-icon">📄</div>
-        <div>
-          <div class="award-title">Published Researcher · Springer</div>
-          <div class="award-desc">Co-authored paper on smart traffic management using hybrid clustering, published in Cluster Computing, Springer (2016).</div>
-        </div>
-      </div>
-
     </div>
   </section>
 
