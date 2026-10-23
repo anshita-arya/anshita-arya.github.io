@@ -6,373 +6,21 @@
   <title>Anshita Arya · Product Manager</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #fafaf9;
-      --surface: #ffffff;
-      --border: #e8e6e3;
-      --text: #1a1a1a;
-      --muted: #6b7280;
-      --accent: #2563eb;
-      --accent-light: #eff6ff;
-      --tag-bg: #f3f4f6;
-      --radius: 10px;
-      --shadow: 0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      font-size: 15px;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(250,250,249,.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner {
-      max-width: 900px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 58px;
-    }
-    .nav-logo {
-      font-weight: 700; font-size: 15px; letter-spacing: -.3px;
-      color: var(--text); text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 28px; list-style: none; }
-    .nav-links a {
-      text-decoration: none; color: var(--muted); font-size: 13.5px;
-      font-weight: 500; transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--accent); }
-
-    /* ── LAYOUT ── */
-    main { max-width: 900px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 80px 0; border-bottom: 1px solid var(--border); }
-    section:last-child { border-bottom: none; }
-
-    .section-label {
-      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
-    }
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem; font-weight: 700;
-      letter-spacing: -.5px; margin-bottom: 28px;
-    }
-
-    /* ── HERO ── */
-    #hero {
-      padding-top: 130px; padding-bottom: 80px;
-      display: flex; flex-direction: column; gap: 20px;
-    }
-    .hero-eyebrow {
-      font-size: 13px; font-weight: 500; color: var(--muted);
-      letter-spacing: .3px;
-    }
-    .hero-name {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 6vw, 3.6rem);
-      font-weight: 700; line-height: 1.15; letter-spacing: -.8px;
-    }
-    .hero-name span { color: var(--accent); }
-    .hero-tagline {
-      font-size: 1.05rem; color: var(--muted);
-      max-width: 580px; line-height: 1.7;
-    }
-    .hero-actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
-    .btn {
-      display: inline-block; padding: 10px 22px; border-radius: 6px;
-      font-size: 13.5px; font-weight: 600; text-decoration: none;
-      transition: all .2s; cursor: pointer; border: none;
-    }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: #1d4ed8; }
-    .btn-outline {
-      background: transparent; color: var(--text);
-      border: 1.5px solid var(--border);
-    }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-    .hero-stats { display: flex; gap: 36px; margin-top: 10px; }
-    .stat-num { font-size: 1.7rem; font-weight: 700; color: var(--text); }
-    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
-
-    /* ── ABOUT ── */
-    .about-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-      align-items: start;
-    }
-    .about-heading { display: flex; align-items: center; gap: 18px; margin-bottom: 28px; }
-    .about-heading h2 { margin-bottom: 0; }
-    .about-headshot {
-      width: 64px; height: 64px; border-radius: 50%;
-      object-fit: cover; object-position: center top;
-      border: 2px solid var(--border);
-      flex-shrink: 0;
-    }
-    .about-text { font-size: 15px; color: var(--muted); line-height: 1.8; }
-    .about-text p + p { margin-top: 14px; }
-    .about-grid--stack { grid-template-columns: 1fr; gap: 32px; }
-
-    /* ── SKILLS STACK ── */
-    .skills-stack-label {
-      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
-    }
-    .stack-layers { display: flex; flex-direction: column; }
-    .stack-layer {
-      display: grid; grid-template-columns: 90px 1fr;
-      gap: 0 20px; align-items: stretch; position: relative;
-    }
-    .stack-layer-side {
-      display: flex; flex-direction: column; align-items: center;
-      padding: 18px 0; position: relative;
-    }
-    .stack-layer:not(:last-child) .stack-layer-side::after {
-      content: ''; position: absolute; left: 50%; top: 68px; bottom: 0;
-      transform: translateX(-50%);
-      width: 2px;
-      background: var(--border); z-index: 0;
-    }
-    .stack-layer-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      flex-shrink: 0; z-index: 2; position: relative;
-    }
-    .stack-layer-name {
-      font-size: 10px; font-weight: 700; letter-spacing: .08em;
-      text-transform: uppercase; margin-top: 7px; text-align: center; line-height: 1.3;
-      position: relative; z-index: 1;
-    }
-    .stack-layer-sublabel {
-      font-size: 9.5px; font-weight: 500; margin-top: 3px;
-      text-align: center; line-height: 1.3;
-      position: relative; z-index: 1;
-    }
-    .stack-layer-content {
-      padding: 18px 0 18px 20px;
-      border-left: 2px solid;
-      display: flex; align-items: center;
-    }
-    .stack-layer:last-child .stack-layer-content { border-left-color: transparent !important; }
-
-    .stack-layer--product .stack-layer-dot { background: #2563eb; outline: 3px solid #eff6ff; }
-    .stack-layer--product .stack-layer-name { color: #1d4ed8; }
-    .stack-layer--product .stack-layer-sublabel { color: #93c5fd; }
-    .stack-layer--product .stack-layer-content { border-left-color: #bfdbfe; }
-    .stack-layer--product .skill-pill { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-
-    .stack-layer--ai .stack-layer-dot { background: #7c3aed; outline: 3px solid #f5f3ff; }
-    .stack-layer--ai .stack-layer-name { color: #6d28d9; }
-    .stack-layer--ai .stack-layer-sublabel { color: #c4b5fd; }
-    .stack-layer--ai .stack-layer-content { border-left-color: #ddd6fe; }
-    .stack-layer--ai .skill-pill { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
-
-    .stack-layer--tech .stack-layer-dot { background: #16a34a; outline: 3px solid #f0fdf4; }
-    .stack-layer--tech .stack-layer-name { color: #15803d; }
-    .stack-layer--tech .stack-layer-sublabel { color: #86efac; }
-    .stack-layer--tech .stack-layer-content { border-left-color: #bbf7d0; }
-    .stack-layer--tech .skill-pill { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-
-    .skill-pills { display: flex; flex-wrap: wrap; gap: 7px; }
-    .skill-pill {
-      border-radius: 20px; padding: 5px 13px;
-      font-size: 12.5px; font-weight: 500;
-    }
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-    .tag {
-      background: var(--tag-bg); color: var(--muted);
-      border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 500;
-    }
-
-    /* ── PROJECTS ── */
-    .projects-grid { display: flex; flex-direction: column; gap: 14px; }
-    .project-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 20px 24px;
-      box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s;
-      display: flex; gap: 24px; align-items: flex-start;
-    }
-    .project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.09); }
-    .project-main { flex: 1; }
-    .project-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .project-title { font-weight: 700; font-size: 15px; }
-    .project-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
-    .project-side {
-      display: flex; flex-direction: column; align-items: flex-end;
-      gap: 8px; flex-shrink: 0; min-width: 160px;
-    }
-    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .project-tag {
-      background: var(--accent-light); color: var(--accent);
-      border-radius: 20px; padding: 3px 10px; font-size: 11.5px; font-weight: 600;
-    }
-    .project-badge {
-      background: #fef3c7; color: #92400e;
-      border-radius: 20px; padding: 3px 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap;
-    }
-    .project-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
-    }
-    .project-gh-link {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12.5px; font-weight: 600; color: var(--muted);
-      text-decoration: none; transition: color .2s;
-    }
-    .project-gh-link:hover { color: var(--text); }
-    .project-gh-link svg { width: 14px; height: 14px; }
-
-    /* ── EXPERIENCE ── */
-    .timeline { display: flex; flex-direction: column; }
-    .timeline-item {
-      display: grid; grid-template-columns: 130px 1fr;
-      gap: 0 28px; padding-bottom: 36px; position: relative;
-    }
-    .timeline-item:not(:last-child)::before {
-      content: '';
-      position: absolute; left: 130px; top: 8px; bottom: 0;
-      width: 1px; background: var(--border); margin-left: 13px;
-    }
-    .timeline-date {
-      font-size: 12px; font-weight: 500; color: var(--muted);
-      padding-top: 3px; text-align: right; line-height: 1.5;
-    }
-    .timeline-dot {
-      position: absolute; left: 130px; top: 5px;
-      width: 9px; height: 9px; border-radius: 50%;
-      background: var(--accent); margin-left: 10px;
-      outline: 3px solid var(--bg);
-    }
-    .timeline-content { padding-left: 28px; }
-    .timeline-role { font-weight: 700; font-size: 15px; }
-    .timeline-company { font-size: 13.5px; color: var(--accent); font-weight: 600; margin-top: 1px; }
-    .timeline-bullets { margin-top: 8px; padding-left: 18px; }
-    .timeline-bullets li {
-      font-size: 13px; color: var(--muted); margin-bottom: 5px; line-height: 1.65;
-    }
-
-    /* ── EDUCATION ── */
-    .edu-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
-    .edu-strip {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 18px 24px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .edu-logo {
-      width: 40px; height: 40px; object-fit: contain;
-      border-radius: 8px; flex-shrink: 0; margin-right: 16px;
-      background: #fff; border: 1px solid var(--border); padding: 4px;
-    }
-    .edu-strip-left { display: flex; align-items: center; }
-    .edu-degree { font-weight: 700; font-size: 14.5px; }
-    .edu-school { font-size: 13px; color: var(--muted); margin-top: 3px; }
-    .timeline-logo {
-      width: 18px; height: 18px; object-fit: contain;
-      border-radius: 4px; vertical-align: middle; margin-right: 6px;
-      background: #fff; border: 1px solid var(--border); padding: 1px;
-    }
-    .edu-right { text-align: right; flex-shrink: 0; }
-    .edu-year { font-size: 13px; color: var(--muted); font-weight: 500; }
-    .edu-gpa {
-      font-size: 12px; font-weight: 600; color: var(--accent);
-      background: var(--accent-light); border-radius: 20px;
-      padding: 2px 9px; margin-top: 4px; display: inline-block;
-    }
-
-    /* ── AWARDS ── */
-    .awards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .award-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 18px 20px;
-      display: flex; gap: 14px; align-items: flex-start;
-    }
-    .award-icon { width: 20px; height: 20px; flex-shrink: 0; display: flex; align-items: flex-start; padding-top: 2px; color: var(--muted); }
-    .award-title { font-weight: 600; font-size: 13.5px; }
-    .award-title a { color: inherit; text-decoration: none; }
-    .award-title a:hover { text-decoration: underline; }
-    .award-desc { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.55; }
-
-    /* ── TALKS ── */
-    .talks-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .talk-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 20px 22px;
-      display: flex; flex-direction: column; gap: 0;
-    }
-    .talk-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
-    .talk-tag {
-      display: inline-block; flex-shrink: 0;
-      background: var(--accent-light); color: var(--accent);
-      border-radius: 20px; padding: 2px 10px; font-size: 11.5px; font-weight: 600;
-    }
-    .talk-year { font-size: 11.5px; color: var(--muted); font-weight: 500; white-space: nowrap; }
-    .talk-title { font-weight: 700; font-size: 13.5px; line-height: 1.4; }
-    .talk-title a { color: inherit; text-decoration: none; }
-    .talk-title a:hover { text-decoration: underline; }
-    .talk-venue { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 4px; }
-    .talk-desc { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.55; flex: 1; }
-
-    /* ── CONTACT ── */
-    .contact-inner {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
-    }
-    .contact-text { font-size: 15px; color: var(--muted); line-height: 1.75; }
-    .contact-links { display: flex; flex-direction: column; gap: 14px; }
-    .contact-link {
-      display: flex; align-items: center; gap: 12px;
-      text-decoration: none; color: var(--text);
-      padding: 14px 18px; border: 1.5px solid var(--border);
-      border-radius: var(--radius); font-size: 14px; font-weight: 500;
-      transition: all .2s;
-    }
-    .contact-link:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-    .contact-link-icon { width: 18px; height: 18px; flex-shrink: 0; display: flex; align-items: center; color: var(--muted); }
-
-    /* ── FOOTER ── */
-    footer {
-      text-align: center; padding: 32px 24px;
-      font-size: 12.5px; color: var(--muted);
-      border-top: 1px solid var(--border);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 640px) {
-      .about-grid, .contact-inner, .awards-grid { grid-template-columns: 1fr; }
-      .project-card { flex-direction: column; }
-      .project-side { align-items: flex-start; min-width: unset; }
-      .project-tags { justify-content: flex-start; }
-      .timeline-item { grid-template-columns: 1fr; }
-      .timeline-item::before { display: none; }
-      .timeline-dot { display: none; }
-      .timeline-date { text-align: left; }
-      .timeline-content { padding-left: 0; }
-      .hero-stats { gap: 24px; flex-wrap: wrap; }
-      nav .nav-links { display: none; }
-      .edu-strip { flex-direction: column; align-items: flex-start; gap: 8px; }
-    }
-  </style>
+  <link rel="stylesheet" href="portfolio.css" />
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="#hero" class="nav-logo">Anshita Arya</a>
+    <a href="#about" class="nav-logo">Anshita Arya</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#education">Education</a></li>
-      <li><a href="#projects">Projects</a></li>
       <li><a href="#talks">Talks</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#blogs">Blogs</a></li>
       <li><a href="#awards">Awards</a></li>
       <li><a href="#leadership">Leadership</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -389,15 +37,65 @@
 </footer>
 
 <script>
-  const sections = ['hero', 'about', 'experience', 'education', 'projects', 'talks', 'awards', 'leadership', 'contact'];
+  const sectionOrder = ['hero', 'about', 'experience', 'education', 'projects', 'talks', 'blogs', 'awards', 'leadership', 'contact'];
+  const tabNames = ['about', 'experience', 'education', 'projects', 'talks', 'blogs', 'awards', 'leadership', 'contact'];
   const main = document.getElementById('main-content');
 
+  const activateTab = (id) => {
+    const panels = document.querySelectorAll('.tab-panel');
+    panels.forEach(panel => {
+      panel.classList.toggle('active', panel.dataset.section === id);
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      const target = link.getAttribute('href')?.replace('#', '');
+      const isActive = target === id;
+      link.classList.toggle('active', isActive);
+    });
+
+    const heroSection = document.querySelector('section#hero');
+    if (heroSection) {
+      heroSection.style.display = id === 'about' ? '' : 'none';
+    }
+
+    history.replaceState(null, '', `#${id}`);
+  };
+
+  const bindNav = () => {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      const target = link.getAttribute('href')?.replace('#', '');
+      if (!target || !tabNames.includes(target)) return;
+
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        activateTab(target);
+      });
+    });
+  };
+
   (async () => {
-    for (const name of sections) {
+    for (const name of sectionOrder) {
       const res = await fetch(`sections/${name}.html`);
       const html = await res.text();
-      main.insertAdjacentHTML('beforeend', html);
+      const fragment = document.createElement('div');
+      fragment.innerHTML = html;
+      const section = fragment.firstElementChild;
+      if (!section) continue;
+
+      section.dataset.section = name;
+      if (name !== 'hero') {
+        section.classList.add('tab-panel');
+      }
+
+      main.appendChild(section);
     }
+
+    const initialTab = tabNames.includes(window.location.hash.replace('#', ''))
+      ? window.location.hash.replace('#', '')
+      : 'about';
+
+    activateTab(initialTab);
+    bindNav();
   })();
 </script>
 
