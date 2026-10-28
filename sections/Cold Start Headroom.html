@@ -1,0 +1,477 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Cold Start Headroom</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@400;500;600&display=swap">
+<style>
+  /* Layout: controls left, verdict + timeline right; stacks to one column on phones. */
+  :root {
+    --bg: #FFFFFF;
+    --surface: #FFFFFF;
+    --fg: #000000;
+    --muted: #666666;
+    --rule: #EBEBEB;
+    --accent: #C721A4;
+    --signal: #DD4302;
+    --signal-soft: #FFF0E9;
+    --ok: #16A34A;
+    --ok-soft: #E8F5EC;
+    --display: "Jost", "Century Gothic", system-ui, sans-serif;
+    --body: "Jost", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  /* Single light theme by choice: white canvas, black text, hairline borders. */
+
+  body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5; margin: 0; }
+  .wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 56px;
+  }
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 18px; margin-bottom: 24px; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h1 { font-family: var(--display); font-weight: 600; font-size: clamp(26px, 4.5vw, 36px); line-height: 1.05; margin: 0 0 10px; letter-spacing: -.03em; }
+  .standfirst { margin: 0; color: var(--muted); max-width: 70ch; }
+
+  .cols { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 26px; align-items: start; }
+  @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 16px 18px; min-width: 0; }
+  .panel h2 { font-family: var(--display); font-size: 14px; margin: 0 0 14px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+  .field { margin-bottom: 15px; }
+  .field label { display: block; font-size: 13px; margin-bottom: 5px; }
+  .field .hint { color: var(--muted); font-size: 11.5px; font-family: var(--mono); }
+  input[type="number"], select {
+    width: 100%; box-sizing: border-box; font-family: var(--mono); font-size: 14px;
+    padding: 7px 9px; border: 1px solid var(--rule); border-radius: 3px;
+    background: var(--bg); color: var(--fg);
+  }
+  input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .presets button {
+    font-family: var(--body); font-size: 12.5px; padding: 6px 10px; cursor: pointer;
+    background: var(--bg); color: var(--fg); border: 1px solid var(--rule); border-radius: 3px;
+  }
+  .presets button:hover { border-color: var(--accent); color: var(--accent); }
+  .scenario { font-size: 12.5px; line-height: 1.45; color: var(--muted); border-left: 2px solid var(--rule);
+    padding-left: 10px; margin: 0 0 16px; }
+  .scenario b { color: var(--fg); font-weight: 500; }
+
+  .verdict { border-radius: 4px; padding: 16px 18px; margin-bottom: 18px; border: 1px solid var(--rule); }
+  .verdict.miss { background: var(--signal-soft); border-color: var(--signal); }
+  .verdict.hit { background: var(--ok-soft); border-color: var(--ok); }
+  .verdict .vlabel { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 6px; }
+  .verdict.miss .vlabel { color: var(--signal); }
+  .verdict.hit .vlabel { color: var(--ok); }
+  .verdict p.vmain { font-family: var(--display); font-size: clamp(18px, 2.6vw, 23px); margin: 0 0 6px; line-height: 1.25; }
+  .verdict p.vsub { margin: 0; font-size: 14px; color: var(--muted); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; margin-bottom: 18px; }
+  .stat { background: var(--surface); padding: 12px 14px; min-width: 0; }
+  .stat .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
+  .stat .v { font-family: var(--display); font-size: 21px; font-variant-numeric: tabular-nums; }
+  .stat .u { font-size: 12px; color: var(--muted); font-family: var(--body); }
+
+  figure { margin: 0 0 18px; }
+  .chartbox { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 12px 8px; overflow-x: auto; }
+  .chartbox svg { display: block; width: 100%; min-width: 480px; height: auto; }
+  figcaption { color: var(--muted); font-size: 12.5px; margin-top: 8px; }
+
+  .phases { margin-bottom: 18px; }
+  .phasebar { display: flex; height: 26px; border-radius: 3px; overflow: hidden; border: 1px solid var(--rule); }
+  .phasebar div { display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 10.5px; color: var(--surface); min-width: 0; overflow: hidden; white-space: nowrap; }
+  .phasekey { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+  .phasekey span { display: flex; align-items: center; gap: 5px; }
+  .sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  .note { border-left: 3px solid var(--accent); padding: 12px 15px; background: var(--surface); border-radius: 0 4px 4px 0; font-size: 13.5px; }
+  .note strong { color: var(--accent); }
+  footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--muted); }
+  .post { max-width: 680px; margin: 56px auto 0; padding-top: 40px; border-top: 1px solid var(--rule); font-size: 16.5px; line-height: 1.62; }
+  .post h2 { font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: -.01em; margin: 40px 0 14px; }
+  .post h2:first-child { margin-top: 0; font-size: clamp(24px, 4.5vw, 32px); line-height: 1.1; letter-spacing: -.025em; }
+  .post p { margin: 0 0 20px; }
+  .post .lede { font-size: 18px; color: var(--muted); line-height: 1.55; }
+  .post blockquote { margin: 26px 0; padding: 0 0 0 20px; border-left: 2px solid var(--accent); font-size: 17px; line-height: 1.55; }
+  .post blockquote p { margin: 0; }
+  .post ul, .post ol { margin: 0 0 20px; padding-left: 22px; }
+  .post li { margin-bottom: 11px; }
+  .post code { font-family: var(--mono); font-size: .88em; background: #F6F6F6; padding: 1px 5px; border-radius: 3px; }
+  .post a { color: var(--accent); }
+  .post .end { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted); }
+  footer a { color: var(--accent); }
+  footer ul { margin: 8px 0 0; padding-left: 18px; }
+  footer li { margin-bottom: 3px; }
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">A model, not a measurement</p>
+  <h1>Cold Start Headroom</h1>
+  <p style="margin:0 0 10px;font-size:14px;color:var(--muted)">By <b style="color:var(--fg);font-weight:500">Anshita Arya</b> &middot; written against <a href="https://www.together.ai/blog/autoscaling-endpoints-for-llm-inference" target="_blank" rel="noopener" style="color:var(--accent)">Autoscaling endpoints for LLM inference</a></p>
+  <p class="standfirst">Together's autoscaling post ends by saying that if traffic can spike 10&times; in 90 seconds and a cold start takes four minutes, the only defences are replica headroom or a higher target &mdash; and that this is better answered before launch day. Set your own traffic shape and autoscaling config on the left and the timeline redraws, so you can see where the gap opens and what closes it.</p>
+</header>
+
+<div class="cols">
+  <form class="panel" id="controls" autocomplete="off">
+    <h2>Your traffic</h2>
+    <div class="presets">
+      <button type="button" data-preset="launch">Launch spike</button>
+      <button type="button" data-preset="coding">Coding agent</button>
+      <button type="button" data-preset="chat">Chat app, 9am</button>
+    </div>
+    <p class="scenario" id="scenario"></p>
+
+    <div class="field">
+      <label for="baseline">Baseline in-flight requests</label>
+      <input type="number" id="baseline" min="1" max="10000" step="1" value="8">
+      <span class="hint">requests being processed at once</span>
+    </div>
+    <div class="field">
+      <label for="multiple">Peak multiple</label>
+      <input type="number" id="multiple" min="1.1" max="200" step="0.5" value="10">
+      <span class="hint">&times; baseline at the top of the spike</span>
+    </div>
+    <div class="field">
+      <label for="ramp">Ramp to peak (seconds)</label>
+      <input type="number" id="ramp" min="1" max="7200" step="5" value="90">
+    </div>
+    <div class="field">
+      <label for="target">Target in-flight per replica</label>
+      <input type="number" id="target" min="1" max="1000" step="1" value="8">
+      <span class="hint">where you start adding replicas, not where one breaks</span>
+    </div>
+    <div class="field">
+      <label for="cap">Replica saturates at</label>
+      <input type="number" id="cap" min="1" max="2000" step="1" value="16">
+      <span class="hint">from a load test: the concurrency where latency crosses your target</span>
+    </div>
+    <div class="field">
+      <label for="window">Scale-up window (seconds)</label>
+      <input type="number" id="window" min="0" max="900" step="5" value="30">
+      <span class="hint">how long pressure must persist</span>
+    </div>
+    <div class="field">
+      <label for="preset">Cold-start budget</label>
+      <select id="preset">
+        <option value="240">Mid-size model, 20&ndash;35B &mdash; 4 min</option>
+        <option value="119">Catalog 9B, warm cluster &mdash; 119s</option>
+        <option value="178">Custom 18GB fine-tune &mdash; 178s</option>
+        <option value="300">Large 70B&ndash;235B &mdash; ~5 min</option>
+        <option value="630">Frontier MoE &mdash; ~10.5 min</option>
+        <option value="custom">Custom&hellip;</option>
+      </select>
+    </div>
+    <div class="field" id="customwrap" hidden>
+      <label for="cold">Cold start (seconds)</label>
+      <input type="number" id="cold" min="1" max="3600" step="5" value="240">
+    </div>
+  </form>
+
+  <div>
+    <div class="verdict" id="verdict">
+      <p class="vlabel" id="vlabel">Verdict</p>
+      <p class="vmain" id="vmain"></p>
+      <p class="vsub" id="vsub"></p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="k">Under-provisioned for</span><span class="v" id="s-gap"></span> <span class="u">seconds</span></div>
+      <div class="stat"><span class="k">Replicas running</span><span class="v" id="s-now"></span> <span class="u">at baseline</span></div>
+      <div class="stat"><span class="k">Replicas needed</span><span class="v" id="s-need"></span> <span class="u">at peak</span></div>
+      <div class="stat"><span class="k">Peak unserved</span><span class="v" id="s-unserved"></span> <span class="u">concurrent requests</span></div>
+    </div>
+
+    <figure>
+      <div class="chartbox" id="chartbox"></div>
+      <figcaption id="capt"></figcaption>
+    </figure>
+
+    <div class="phases">
+      <div class="phasebar" id="phasebar"></div>
+      <div class="phasekey">
+        <span><i class="sw" style="background:var(--accent)"></i>GPU placement</span>
+        <span><i class="sw" style="background:var(--signal)"></i>Weight download</span>
+        <span><i class="sw" style="background:var(--muted)"></i>Engine load</span>
+        <span><i class="sw" style="background:var(--fg)"></i>Warmup + routing</span>
+      </div>
+    </div>
+
+    <div class="note">
+      <p style="margin:0"><strong>What this is.</strong> Arithmetic on your inputs and Together's published cold-start phases. It is not a benchmark, and it has not been run against the platform. The four phases are Together's; the split shown between them is proportional, since only the totals are published. Queueing is reported as excess concurrency rather than a predicted TTFT, because turning concurrency into a latency number needs the engine's own batching behaviour, which is not public. Saturation is treated as a single number, and it is really a curve: a replica is bounded hard by KV cache memory (weights first, then concurrent sequences divide what is left, so long contexts fit fewer), and softly by the compute knee where batching stops being free. In practice you get the number from a load test, by pushing concurrency until p95 leaves your SLO &mdash; which makes it part physics and part policy. The distance between your target and that limit is the headroom the autoscaler spends while new replicas start. It also treats every request as costing the same, which is the weak point of in-flight concurrency as a signal: prompt length drives prefill and output length drives decode, so eight short chat turns and eight long-context agent calls are the same number and nowhere near the same load. Where per-request cost varies that much, a token-weighted signal or TTFT describes pressure better than a request count does.</p>
+    </div>
+
+    <footer>
+      Independent analysis, built from Together AI's published material. Not affiliated with or published by Together AI.
+      <br><br>Figures taken from:
+      <ul>
+        <li><a href="https://www.together.ai/blog/autoscaling-endpoints-for-llm-inference" target="_blank" rel="noopener">Autoscaling endpoints for LLM inference</a> &mdash; cold-start phases, and the measured 1&times;H100 timings (9B catalog model to READY 86s; 18GB fine-tune 145s; READY to first token +26&ndash;40s)</li>
+        <li><a href="https://www.together.ai/blog/the-production-platform-for-open-weight-ai-inference" target="_blank" rel="noopener">The production platform for open-weight AI inference</a> &mdash; deployment times by model size, and the ~4&times; faster warm starts from fleet-wide weight caching</li>
+      </ul>
+    </footer>
+  </div>
+</div>
+
+<article class="post">
+  <h2>You can't autoscale your way out of a cold start. So what do you do instead?</h2>
+
+  <p class="lede">Together's autoscaling post makes an argument most platform docs avoid. It says, plainly, that the usual advice does not work here.</p>
+
+  <blockquote><p>"Cold starts can take several minutes. A new replica has to be placed on a GPU node, pull tens of gigabytes of weights, load them into VRAM, and warm up. This means that you can't scale your way out of a spike, because by the time it arrives it's already too late to scale up."</p></blockquote>
+
+  <p>Then it gives you a framework: scale on signals the inference engine understands rather than GPU utilization, go up eagerly and come down patiently, and if your spike outruns your cold start, treat it as a capacity-shape question "better answered before launch day."</p>
+
+  <p>That last line is the one I kept rereading. It is correct, and it stops exactly where the reader's problem starts. Nobody knows their capacity shape. They know their peak. The simulator above is the missing arithmetic; the rest of this is how to use it.</p>
+
+  <h2>Step 1: measure your slope, not your peak</h2>
+
+  <p>Every team can tell you their peak. Almost nobody can tell you how fast they get there, which is the number that actually decides whether autoscaling is a viable strategy for them.</p>
+
+  <p>The quantity you need is the rate of change of concurrency &mdash; how many additional in-flight requests arrive per second during your worst ramp. Peak tells you how much capacity you need eventually. Slope tells you whether you can acquire it in time.</p>
+
+  <p>If you have request logs, this is a short query: bucket by second, compute in-flight, take the steepest sustained rise over a window the length of your cold start. If you don't have logs yet, you can usually reason about it from the shape of the trigger. A marketing email lands and the ramp is minutes. A coding agent kicks off and fans one user action into fifty model calls, and the ramp is seconds.</p>
+
+  <h2>Step 2: add up your reaction budget</h2>
+
+  <p>Together breaks a cold start into four phases: GPU placement, weight download, engine load, warmup. The platform's event feed timestamps each one. The measured numbers they publish for a single H100 on a warm cluster are a useful anchor: a 9B catalog model reaches READY in about 86 seconds, a fresh 18GB fine-tune in about 145, and it takes another 26 to 40 seconds before the first token comes back through routing. Larger models take proportionally longer, up to roughly 7 to 14 minutes for frontier MoE models.</p>
+
+  <p>Your reaction budget is that cold start plus your <code>scale_up_window</code>, because the autoscaler waits for pressure to persist before it acts. Call it detection plus startup. Now compare it to your ramp:</p>
+
+  <ul>
+    <li><b>Ramp longer than the budget.</b> Autoscaling works. Tune the metric and the windows as the post describes, and you are done.</li>
+    <li><b>Ramp shorter than the budget.</b> Autoscaling is structurally unable to help you, and no amount of tuning changes that. You are not choosing a configuration. You are choosing who absorbs the cost.</li>
+  </ul>
+
+  <h2>Step 3: pick which cost you are paying</h2>
+
+  <p>Once you are in the second case, there are only four levers, and all of them cost something. The useful move is to be explicit about which currency you are paying in.</p>
+
+  <p><b>Hold headroom.</b> Set <code>min_replicas</code> high enough to absorb the spike with capacity that is already warm. You pay for idle GPU, continuously, for an event that happens occasionally. This is the honest default and usually the right one for anything with a p95 SLO.</p>
+
+  <p><b>Lower the target.</b> Run every replica slacker so there is spare concurrency in the system at all times. The same bill as headroom, arriving under a different name, with the advantage that the slack is distributed rather than sitting in one spare replica.</p>
+
+  <p><b>Shrink the budget.</b> Attack the cold start itself. A smaller model, quantized weights, pinned and cached weights, a warm pool. Together's platform does the fleet-side version of this already: they rebuilt the model caching and distribution layer so weights are shared across the fleet and proactively warmed before a deployment needs them, which they report as roughly 4x faster warm starts.</p>
+
+  <p><b>Shed load deliberately.</b> The lever people reach for last and should consider first. If you cannot serve the spike at full quality, decide in advance what degrades: queue with a published wait, fall back to a smaller model, or send the overflow somewhere that is already warm.</p>
+
+  <h2>The pattern I would want</h2>
+
+  <p>That last lever is where I think there is something missing from the current story, and it comes from how this problem was solved on CPU.</p>
+
+  <p>Having built on serverless CPU platforms, the standard answer to cold start there is a small number of pre-warmed instances that absorb the first burst while the elastic tier catches up. The architecture pairs a reserved floor with an elastic ceiling, and the floor exists purely to cover the reaction gap.</p>
+
+  <p>The inference equivalent is sitting right there in the product line. A dedicated endpoint gives you predictable latency and a cold start measured in minutes. Serverless gives you a shared warm pool with no cold start at all, at the cost of latency variance under load. Those are usually presented as a choice. For spiky traffic they look more like two halves of one design: dedicated for the baseline, with overflow spilling to serverless during the window where your replicas are still starting.</p>
+
+  <p>You would need the model available on both tiers, you would accept higher and more variable TTFT for the overflow portion, and you would need routing that can make that decision quickly enough to matter. I do not know whether that is supported today or whether the routing economics work. But the shape of it is familiar from the CPU era, and the gap it covers is precisely the one the autoscaling post identifies and then, reasonably, leaves to the reader.</p>
+
+  <h2>What I would add to the original post</h2>
+
+  <ol>
+    <li><b>A worked example with the arithmetic shown.</b> The post gives the 10x-in-90-seconds case as an illustration. Running it all the way through &mdash; here is the ramp, here is the budget, here is the shortfall, here is the <code>min_replicas</code> that closes it &mdash; turns a caution into a procedure.</li>
+    <li><b>Per-phase timings across model sizes.</b> The phase names are published and the totals are published, but not the split. Knowing whether a 10-minute frontier cold start is mostly download or mostly warmup tells you which lever to pull.</li>
+    <li><b>A section on what to do when the answer is "you can't."</b> The post is honest that the autoscaler cannot win this one. It is a short step from there to the four levers, and that is the part a developer takes to their own architecture review.</li>
+  </ol>
+
+  <p class="end">Written against Together AI's published material. The simulator models Together's published figures; it is not a benchmark and was not run against their platform. Independent work, not affiliated with or published by Together AI.</p>
+</article>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var ids = ["baseline", "multiple", "ramp", "target", "cap", "window", "cold"];
+  var presets = {
+    launch: { baseline: 8, multiple: 10, ramp: 90, target: 8, cap: 16, window: 30, preset: "240" },
+    coding: { baseline: 12, multiple: 25, ramp: 20, target: 6, cap: 12, window: 15, preset: "119" },
+    chat:   { baseline: 20, multiple: 4, ramp: 1800, target: 8, cap: 16, window: 60, preset: "300" }
+  };
+  var scenarios = {
+    launch: "<b>A push notification or launch email goes out</b> and everyone opens the app inside two minutes. 8 in-flight becomes 80 in 90 seconds, against a four-minute cold start. This is the shape the autoscaling post uses as its cautionary case, and it is the one autoscaling cannot win.",
+    coding: "<b>A developer asks a coding agent to work across a repo</b> and the harness fans that single action into dozens of model calls with long contexts. 12 in-flight becomes 300 in about 20 seconds &mdash; faster than any replica can start, and each call is expensive enough that a replica saturates sooner. Only capacity already running helps here.",
+    chat:   "<b>A business-hours support assistant</b>: short prompts, short answers, and everyone signing in between 8 and 9am. 20 in-flight becomes 80 across half an hour, which is slow enough that the autoscaler has time to react. This is the case the defaults are built for, and the one where tuning actually pays.",
+    custom: "<b>Your own numbers.</b> The verdict below recalculates on every change, so you can find the point where the ramp outruns your reaction budget."
+  };
+  function setScenario(k) { $("scenario").innerHTML = scenarios[k]; }
+
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+
+  function coldStart() {
+    var p = $("preset").value;
+    return p === "custom" ? Math.max(1, num("cold")) : parseFloat(p);
+  }
+
+  function model() {
+    var I0 = Math.max(1, num("baseline"));
+    var M = Math.max(1.01, num("multiple"));
+    var T = Math.max(1, num("ramp"));
+    var C = Math.max(1, num("target"));
+    var W = Math.max(0, num("window"));
+    var B = coldStart();
+
+    var L = Math.max(C, num("cap"));
+    var Ipeak = I0 * M;
+    var N0 = Math.max(1, Math.ceil(I0 / C));
+    var Npeak = Math.ceil(Ipeak / C);
+    var capNow = N0 * L;          // what the running replicas can actually serve
+    var trigAt = N0 * C;          // where the autoscaler starts counting
+
+    // demand(t): linear ramp from I0 to Ipeak over T, flat after
+    var demand = function (t) { return t >= T ? Ipeak : I0 + (Ipeak - I0) * (t / T); };
+    var crosses = function (v) { return Ipeak <= v ? Infinity : (v <= I0 ? 0 : T * (v - I0) / (Ipeak - I0)); };
+
+    var tOverTarget = crosses(trigAt);          // autoscaler notices
+    var tShort = crosses(capNow);               // requests actually start queueing
+    var tTrigger = tOverTarget + W;
+    var tArrive = tTrigger + B;
+
+    var willQueue = isFinite(tShort);
+    var caught = !willQueue || tArrive <= tShort;
+    var gap = !willQueue ? 0 : Math.max(0, tArrive - tShort);
+
+    var worstAt = !willQueue ? 0 : Math.min(tArrive, T);
+    var unserved = !willQueue ? 0 : Math.max(0, demand(worstAt) - capNow);
+
+    return { I0: I0, M: M, T: T, C: C, L: L, W: W, B: B, Ipeak: Ipeak, N0: N0, Npeak: Npeak,
+             capNow: capNow, trigAt: trigAt, demand: demand, tExceed: tShort, tShort: tShort, tOverTarget: tOverTarget,
+             tTrigger: tTrigger, tArrive: tArrive, caught: caught, gap: gap, unserved: unserved, willQueue: willQueue };
+  }
+
+  function fmt(n) { return n >= 100 ? Math.round(n).toLocaleString() : (Math.round(n * 10) / 10).toLocaleString(); }
+
+  function chart(m) {
+    var W = 720, H = 300, L = 54, R = 16, Tp = 18, Bt = 42;
+    var pw = W - L - R, ph = H - Tp - Bt;
+    var tMax = Math.max(m.T * 1.5, isFinite(m.tArrive) ? m.tArrive * 1.15 : m.T * 1.5, 30);
+    var yMax = Math.max(m.Ipeak, m.Npeak * m.C) * 1.12;
+    var x = function (t) { return L + (t / tMax) * pw; };
+    var y = function (v) { return Tp + ph - (v / yMax) * ph; };
+
+    var pts = [], i, t;
+    for (i = 0; i <= 120; i++) { t = (tMax / 120) * i; pts.push(x(t).toFixed(1) + "," + y(m.demand(t)).toFixed(1)); }
+
+    var arrive = isFinite(m.tArrive) ? Math.min(m.tArrive, tMax) : tMax;
+    var capPath = "M" + x(0) + "," + y(m.capNow) + " L" + x(arrive) + "," + y(m.capNow) +
+                  (isFinite(m.tArrive) && m.tArrive < tMax
+                    ? " L" + x(arrive) + "," + y(m.Npeak * m.C) + " L" + x(tMax) + "," + y(m.Npeak * m.C)
+                    : "");
+
+    // shaded shortfall region
+    var shade = "";
+    if (isFinite(m.tExceed) && m.gap > 0) {
+      var a = m.tExceed, b = Math.min(m.tArrive, tMax), top = [], bot = [], n = 40, tt;
+      for (i = 0; i <= n; i++) { tt = a + (b - a) * (i / n); top.push(x(tt).toFixed(1) + "," + y(m.demand(tt)).toFixed(1)); }
+      for (i = n; i >= 0; i--) { tt = a + (b - a) * (i / n); bot.push(x(tt).toFixed(1) + "," + y(m.capNow).toFixed(1)); }
+      shade = '<polygon points="' + top.concat(bot).join(" ") + '" fill="var(--signal)" fill-opacity="0.16"/>';
+    }
+
+    var ticks = "", k, tv;
+    for (k = 0; k <= 4; k++) {
+      tv = (tMax / 4) * k;
+      ticks += '<line x1="' + x(tv) + '" y1="' + (Tp + ph) + '" x2="' + x(tv) + '" y2="' + (Tp + ph + 4) + '" stroke="currentColor" stroke-width="1" opacity=".5"/>' +
+               '<text x="' + x(tv) + '" y="' + (Tp + ph + 17) + '" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">' + Math.round(tv) + 's</text>';
+    }
+    var ylab = "";
+    for (k = 0; k <= 3; k++) {
+      var yv = (yMax / 3) * k;
+      ylab += '<line x1="' + L + '" y1="' + y(yv) + '" x2="' + (W - R) + '" y2="' + y(yv) + '" stroke="currentColor" stroke-width="1" opacity=".09"/>' +
+              '<text x="' + (L - 8) + '" y="' + (y(yv) + 4) + '" text-anchor="end" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">' + Math.round(yv) + '</text>';
+    }
+
+    var marks = "";
+    if (isFinite(m.tExceed) && m.tExceed <= tMax) {
+      marks += '<line x1="' + x(m.tExceed) + '" y1="' + Tp + '" x2="' + x(m.tExceed) + '" y2="' + (Tp + ph) + '" stroke="var(--signal)" stroke-width="1" stroke-dasharray="3 3"/>' +
+               '<text x="' + (x(m.tExceed) + 5) + '" y="' + (Tp + 12) + '" font-size="10.5" fill="var(--signal)" font-family="IBM Plex Mono, monospace">queueing starts</text>';
+    }
+    if (isFinite(m.tArrive) && m.tArrive <= tMax) {
+      marks += '<line x1="' + x(m.tArrive) + '" y1="' + Tp + '" x2="' + x(m.tArrive) + '" y2="' + (Tp + ph) + '" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3"/>' +
+               '<text x="' + (x(m.tArrive) + 5) + '" y="' + (Tp + 12) + '" font-size="10.5" fill="var(--accent)" font-family="IBM Plex Mono, monospace">capacity arrives</text>';
+    }
+
+    $("chartbox").innerHTML =
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Demand rises to ' + Math.round(m.Ipeak) +
+      ' concurrent requests while served capacity stays flat at ' + Math.round(m.capNow) +
+      ' until new replicas arrive after ' + Math.round(m.B) + ' seconds of cold start.">' +
+      '<g font-family="IBM Plex Sans, sans-serif">' + ylab + ticks + shade +
+      '<polyline points="' + pts.join(" ") + '" fill="none" stroke="var(--signal)" stroke-width="2"/>' +
+      '<path d="' + capPath + '" fill="none" stroke="var(--accent)" stroke-width="2"/>' +
+      marks +
+      '<text x="' + (L + 6) + '" y="' + (y(m.capNow) - 7) + '" font-size="11.5" fill="var(--accent)">served capacity</text>' +
+      '<text x="' + (W - R) + '" y="' + (y(m.Ipeak) - 8) + '" text-anchor="end" font-size="11.5" fill="var(--signal)">demand</text>' +
+      '<text x="' + (L - 8) + '" y="' + (Tp - 4) + '" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="IBM Plex Mono, monospace">reqs</text>' +
+      '</g></svg>';
+  }
+
+  function phases(B) {
+    // Published totals only; this split is proportional, as the post gives phase names but not a per-phase breakdown for every size.
+    var parts = [
+      { n: "placement", f: 0.25, c: "var(--accent)" },
+      { n: "weights", f: 0.35, c: "var(--signal)" },
+      { n: "engine load", f: 0.2, c: "var(--muted)" },
+      { n: "warmup", f: 0.2, c: "var(--fg)" }
+    ];
+    $("phasebar").innerHTML = parts.map(function (p) {
+      var s = Math.round(B * p.f);
+      return '<div style="flex:' + p.f + ';background:' + p.c + '">' + s + 's</div>';
+    }).join("");
+  }
+
+  function render() {
+    var m = model();
+    var v = $("verdict"), cls = m.caught ? "hit" : "miss";
+    v.className = "verdict " + cls;
+    $("vlabel").textContent = m.caught ? "Autoscaling catches it" : "Autoscaling cannot catch it";
+
+    if (!m.willQueue) {
+      $("vmain").textContent = "Your peak fits inside the capacity you already run.";
+      $("vsub").textContent = "Demand peaks at " + Math.round(m.Ipeak) + " against " + Math.round(m.capNow) +
+        " of serving capacity, so nothing queues — though you cross the target of " + m.C + " per replica and scale up anyway.";
+    } else if (m.caught) {
+      $("vmain").textContent = "New replicas arrive " + fmt(m.tShort - m.tArrive > 0 ? m.tShort - m.tArrive : 0) + "s before anything queues.";
+      $("vsub").textContent = "You cross the target at " + Math.round(m.tOverTarget) + "s, capacity lands at " +
+        Math.round(m.tArrive) + "s, and you would not have started queueing until " + Math.round(m.tShort) + "s.";
+    } else {
+      $("vmain").textContent = "You are short by " + fmt(m.tArrive - m.T) + "s at the top of the spike.";
+      $("vsub").textContent = "You start queueing at " + Math.round(m.tShort) + "s. Detection takes " + Math.round(m.W) +
+        "s and the cold start " + Math.round(m.B) + "s, so capacity only lands at " + fmt(m.tArrive) +
+        "s. Hold " + m.Npeak + " replicas (" + (m.Npeak - m.N0) + " more than baseline) or raise the target.";
+    }
+
+    $("s-gap").textContent = Math.round(m.gap);
+    $("s-now").textContent = m.N0;
+    $("s-need").textContent = m.Npeak;
+    $("s-unserved").textContent = Math.round(m.unserved);
+
+    $("capt").textContent = "Demand ramps to " + Math.round(m.Ipeak) + " concurrent requests. Served capacity holds at " +
+      Math.round(m.capNow) + " (" + m.N0 + " replica" + (m.N0 === 1 ? "" : "s") + " saturating at " + m.L +
+      ") until new replicas finish starting. The autoscaler starts counting earlier, at the target of " + m.trigAt +
+      ". The shaded area is where demand is above what you can actually serve.";
+
+    chart(m);
+    phases(m.B);
+  }
+
+  ids.forEach(function (id) { $(id).addEventListener("input", function () { setScenario("custom"); render(); }); });
+  $("preset").addEventListener("change", function () {
+    $("customwrap").hidden = $("preset").value !== "custom";
+    render();
+  });
+  document.querySelectorAll(".presets button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var key = b.getAttribute("data-preset"), p = presets[key];
+      Object.keys(p).forEach(function (k) { $(k).value = p[k]; });
+      $("customwrap").hidden = $("preset").value !== "custom";
+      setScenario(key);
+      render();
+    });
+  });
+  $("controls").addEventListener("submit", function (e) { e.preventDefault(); });
+
+  setScenario("launch");
+  render();
+})();
+</script>
+
+</body></html>
